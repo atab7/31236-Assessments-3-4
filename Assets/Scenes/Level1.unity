@@ -13072,6 +13072,7 @@ GameObject:
   - component: {fileID: 641191483}
   - component: {fileID: 641191482}
   - component: {fileID: 641191484}
+  - component: {fileID: 641191485}
   m_Layer: 0
   m_Name: Ghost1
   m_TagString: Untagged
@@ -13166,6 +13167,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &641191485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641191481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7a809f5a093bbc47ad2f66b9c40799f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &643036569
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39160,6 +39173,7 @@ GameObject:
   - component: {fileID: 1944405061}
   - component: {fileID: 1944405060}
   - component: {fileID: 1944405062}
+  - component: {fileID: 1944405063}
   m_Layer: 0
   m_Name: PacStudent
   m_TagString: Untagged
@@ -39254,6 +39268,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1944405063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1944405059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ffdabc41235ac2469a9eb9a20613e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1944526700
 PrefabInstance:
   m_ObjectHideFlags: 0
