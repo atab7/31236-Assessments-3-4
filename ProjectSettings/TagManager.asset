@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Buttons
+    uniqueID: 4275007803
+    locked: 0
+  - name: Panel
+    uniqueID: 437596225
+    locked: 0
