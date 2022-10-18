@@ -13072,7 +13072,6 @@ GameObject:
   - component: {fileID: 641191483}
   - component: {fileID: 641191482}
   - component: {fileID: 641191484}
-  - component: {fileID: 641191485}
   m_Layer: 0
   m_Name: Ghost1
   m_TagString: Untagged
@@ -13167,18 +13166,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &641191485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 641191481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7a809f5a093bbc47ad2f66b9c40799f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &643036569
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13335,7 +13322,7 @@ Animator:
   m_GameObject: {fileID: 651228113}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f9f3ddfba3a6c364a9e5bbac7a4188cc, type: 2}
+  m_Controller: {fileID: 9100000, guid: ecfe533c4b3c83e479bce654dc7705f8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -16131,7 +16118,7 @@ Animator:
   m_GameObject: {fileID: 769167138}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: dceb7be5afbc344419186128c939532d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6eb6ce336171a4a45811b1860e933c2b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -39173,7 +39160,6 @@ GameObject:
   - component: {fileID: 1944405061}
   - component: {fileID: 1944405060}
   - component: {fileID: 1944405062}
-  - component: {fileID: 1944405063}
   m_Layer: 0
   m_Name: PacStudent
   m_TagString: Untagged
@@ -39268,18 +39254,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1944405063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1944405059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ffdabc41235ac2469a9eb9a20613e62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1944526700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41423,7 +41397,7 @@ Animator:
   m_GameObject: {fileID: 2048034523}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: afd3b0cf34eb3924a8a63f5a698ce4de, type: 2}
+  m_Controller: {fileID: 9100000, guid: 3b89c4fa2ee6a4742a01a895a08a597b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
