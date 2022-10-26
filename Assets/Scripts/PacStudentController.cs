@@ -5,6 +5,12 @@ using UnityEngine;
 public class PacStudentController : MonoBehaviour
 {
 
+    [SerializeField] private ParticleSystem dustEffect;
+    private Animator animator;
+    [SerializeField] private AudioClip walkingSound;
+    [SerializeField] private AudioClip eatingSound;
+    private AudioSource audioSource;
+    private bool isEating;
     private Vector3 currentInput;
     private Vector3 lastInput;
     private Vector3 targetPosition;
@@ -38,7 +44,10 @@ public class PacStudentController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isEating = false;
+        audioSource = GetComponent<AudioSource>();
         CompleteMap();
+        animator = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -52,39 +61,70 @@ public class PacStudentController : MonoBehaviour
         if (lastInput == null || startPosition == null || targetPosition == null)
             return;
 
-        //Vector3 nextPosition = this.transform.position;
-
         if (Vector3.Distance(startPosition, targetPosition) > 0.1f)
         {
+            PlayAudio();
             LerpPacStu();
+            PlayDustEffect();
             return;
         }
         elapsedTime = 0;
 
         if (!WallExists(lastInput))
         {
-            //targetPosition = transform.position + lastInput * 16;
-            //nextPosition += lastInput * 100.0f * Time.deltaTime;
             UpdateMapPosition(lastInput);
             targetPosition = grid[currRow, currCol];
             currentInput = lastInput;
+            SetAnimatorParam(lastInput);
         }
         else
         {
             if (!WallExists(currentInput))
             {
-                //targetPosition = transform.position + lastInput * 14;
-                //nextPosition += currentInput * 500.0f * Time.deltaTime;
                 UpdateMapPosition(currentInput);
                 targetPosition = grid[currRow, currCol];
             }
-            else
-                Debug.Log(currRow + ", " + currCol);
             
         }
 
-        //this.transform.position = nextPosition;
     }
+
+
+    void PlayAudio()
+    {
+        if (!audioSource.isPlaying)
+        {
+            if (!isEating)
+                audioSource.PlayOneShot(walkingSound, 0.3f);
+            audioSource.PlayOneShot(eatingSound, 0.3f);
+        }
+    }
+
+    void PlayDustEffect()
+    {
+        dustEffect.Play();
+    }
+
+    void SetAnimatorParam(Vector3 direction)
+    {
+        if (direction == Vector3.right)
+        {
+            animator.SetInteger("Direction", 3);
+        }
+        else if (direction == Vector3.left)
+        {
+            animator.SetInteger("Direction", 9);
+        }
+        else if (direction == Vector3.up)
+        {
+            animator.SetInteger("Direction", 12);
+        }
+        else if (direction == Vector3.down)
+        {
+            animator.SetInteger("Direction", 6);
+        }
+    }
+
 
     void GetInput()
     {
