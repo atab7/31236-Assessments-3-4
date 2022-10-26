@@ -10,7 +10,6 @@ public class PacStudentController : MonoBehaviour
     [SerializeField] private AudioClip walkingSound;
     [SerializeField] private AudioClip eatingSound;
     private AudioSource audioSource;
-    private bool isEating;
     private Vector3 currentInput;
     private Vector3 lastInput;
     private Vector3 targetPosition;
@@ -44,7 +43,6 @@ public class PacStudentController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isEating = false;
         audioSource = GetComponent<AudioSource>();
         CompleteMap();
         animator = gameObject.GetComponent<Animator>();
@@ -89,14 +87,28 @@ public class PacStudentController : MonoBehaviour
 
     }
 
+    bool IsPellet()
+    {
+        /* 
+         * returns true if the current location is pellet
+         * false if empty
+         */
+
+        if (levelMap[currRow, currCol] == 5)
+            return true;
+        return false;
+    }
+
 
     void PlayAudio()
     {
         if (!audioSource.isPlaying)
         {
-            if (!isEating)
+            if (IsPellet())
+                audioSource.PlayOneShot(eatingSound, 0.3f);
+            else
                 audioSource.PlayOneShot(walkingSound, 0.3f);
-            audioSource.PlayOneShot(eatingSound, 0.3f);
+            
         }
     }
 
