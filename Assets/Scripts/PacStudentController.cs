@@ -10,7 +10,7 @@ public class PacStudentController : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 startPosition;
     private float elapsedTime;
-    private const float duration = 100f;
+    private const float duration = 0.5f;
     private int currRow = 1;
     private int currCol = 1;
     Vector3[,] grid;
@@ -59,6 +59,7 @@ public class PacStudentController : MonoBehaviour
             LerpPacStu();
             return;
         }
+        elapsedTime = 0;
 
         if (!WallExists(lastInput))
         {
