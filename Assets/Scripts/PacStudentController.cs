@@ -20,6 +20,7 @@ public class PacStudentController : MonoBehaviour
     private int currCol = 1;
     Vector3[,] grid;
     private GameObject pacStuCollider;
+    private bool teleportNow = false;
 
 
     int[,] levelMap =
@@ -61,6 +62,13 @@ public class PacStudentController : MonoBehaviour
         if (lastInput == null || startPosition == null || targetPosition == null)
             return;
 
+        if (teleportNow)
+        {
+            TeleportPacStu();
+            teleportNow = false;
+            return;
+        }
+
         if (Vector3.Distance(startPosition, targetPosition) > 0.1f)
         {
             PlayAudio();
@@ -92,16 +100,67 @@ public class PacStudentController : MonoBehaviour
 
     bool IsPellet()
     {
-        /* 
-         * returns true if the current location is pellet
-         * false if empty
-         */
-
         if (levelMap[currRow, currCol] == 5 || levelMap[currRow, currCol] == 6)
             return true;
         return false;
     }
 
+    private void TeleportPacStu()
+    {
+        int col = 0;
+        int row = 0;
+
+        if (currRow == 14 && currCol == 1)
+        {
+            row = 14;
+            col = 25;
+
+            transform.position = grid[row, col];
+            currRow = row;
+            currCol = col;
+            startPosition = grid[row, col]; ;
+            targetPosition = grid[row, col];
+        }
+        else if (currRow == 15 && currCol == 1)
+        {
+            row = 15;
+            col = 25;
+
+            transform.position = grid[row, col];
+            currRow = row;
+            currCol = col;
+            startPosition = grid[row, col]; ;
+            targetPosition = grid[row, col];
+        }
+        else if (currRow == 14 && currCol == 26)
+        {
+            row = 14;
+            col = 1;
+
+            transform.position = grid[row, col];
+            currRow = row;
+            currCol = col;
+            startPosition = grid[row, col]; ;
+            targetPosition = grid[row, col];
+        }
+        else if (currRow == 15 && currCol == 26)
+        {
+            row = 15;
+            col = 1;
+
+            transform.position = grid[row, col];
+            currRow = row;
+            currCol = col;
+            startPosition = grid[row, col]; ;
+            targetPosition = grid[row, col];
+        }
+              
+    }
+
+    public void setTeleportNow(bool val)
+    {
+        teleportNow = val;
+    }
 
     void RotateCollider(Vector3 direction)
     {

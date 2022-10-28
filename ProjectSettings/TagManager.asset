@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Wall3
+  - Pellet
+  - Wall2
+  - Wall4
+  - Wall1
+  - PowerPellet
+  - Wall7
+  - gridAnchor
+  - AudioManager
+  - PacStuCollider
   layers:
   - Default
   - TransparentFX
