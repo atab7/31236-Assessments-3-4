@@ -19,6 +19,7 @@ public class PacStudentController : MonoBehaviour
     private int currRow = 1;
     private int currCol = 1;
     Vector3[,] grid;
+    private GameObject pacStuCollider;
 
 
     int[,] levelMap =
@@ -43,6 +44,7 @@ public class PacStudentController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        pacStuCollider = GameObject.FindGameObjectWithTag("PacStuCollider");
         audioSource = GetComponent<AudioSource>();
         CompleteMap();
         animator = gameObject.GetComponent<Animator>();
@@ -74,6 +76,7 @@ public class PacStudentController : MonoBehaviour
             targetPosition = grid[currRow, currCol];
             currentInput = lastInput;
             SetAnimatorParam(lastInput);
+            RotateCollider(lastInput);
         }
         else
         {
@@ -94,11 +97,31 @@ public class PacStudentController : MonoBehaviour
          * false if empty
          */
 
-        if (levelMap[currRow, currCol] == 5)
+        if (levelMap[currRow, currCol] == 5 || levelMap[currRow, currCol] == 6)
             return true;
         return false;
     }
 
+
+    void RotateCollider(Vector3 direction)
+    {
+        if (direction == Vector3.right)
+        {
+            pacStuCollider.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (direction == Vector3.left)
+        {
+            pacStuCollider.transform.rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (direction == Vector3.up)
+        {
+            pacStuCollider.transform.rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else if (direction == Vector3.down)
+        {
+            pacStuCollider.transform.rotation = Quaternion.Euler(0, 0, 270);
+        }
+    }
 
     void PlayAudio()
     {
