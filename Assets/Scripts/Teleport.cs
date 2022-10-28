@@ -20,7 +20,8 @@ public class Teleport : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        pacStuController.setTeleportNow(true);
+        if (other.CompareTag("PacStuCollider"))
+            pacStuController.setTeleportNow(true);
     }
 
     

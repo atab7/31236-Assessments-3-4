@@ -8,8 +8,8 @@ public class PacStudentController : MonoBehaviour
     [SerializeField] private ParticleSystem dustEffect;
     private Animator animator;
     [SerializeField] private AudioClip walkingSound;
-    [SerializeField] private AudioClip eatingSound;
-    private AudioSource audioSource;
+    public AudioClip eatingSound;
+    public AudioSource audioSource;
     private Vector3 currentInput;
     private Vector3 lastInput;
     private Vector3 targetPosition;
@@ -76,10 +76,15 @@ public class PacStudentController : MonoBehaviour
             PlayDustEffect();
             return;
         }
+        else
+        {
+            SwapPellet();
+        }
         elapsedTime = 0;
 
         if (!WallExists(lastInput))
         {
+            
             UpdateMapPosition(lastInput);
             targetPosition = grid[currRow, currCol];
             currentInput = lastInput;
@@ -103,6 +108,12 @@ public class PacStudentController : MonoBehaviour
         if (levelMap[currRow, currCol] == 5 || levelMap[currRow, currCol] == 6)
             return true;
         return false;
+    }
+
+    public void SwapPellet()
+    {
+        if (IsPellet())
+            levelMap[currRow, currCol] = 0;
     }
 
     private void TeleportPacStu()
@@ -187,7 +198,9 @@ public class PacStudentController : MonoBehaviour
         if (!audioSource.isPlaying)
         {
             if (IsPellet())
+            {
                 audioSource.PlayOneShot(eatingSound, 0.3f);
+            }
             else
                 audioSource.PlayOneShot(walkingSound, 0.3f);
             
@@ -340,8 +353,8 @@ public class PacStudentController : MonoBehaviour
 
         grid = new Vector3[compRows, compCols];
         Vector3 initPos = GameObject.FindGameObjectWithTag("gridAnchor").transform.position;
-        Vector3 rightIncrement = Vector3.right * 11.5f;
-        Vector3 downIncrement = Vector3.down * 11.5f;
+        Vector3 rightIncrement = Vector3.right * 11.45f;
+        Vector3 downIncrement = Vector3.down * 11.45f;
 
         for(int i = 0; i < compRows; i++)
         {

@@ -6,7 +6,7 @@ public class WallBehaivour : MonoBehaviour
 {
     private AudioSource audioSource;
     [SerializeField] private AudioClip collisionAudio;
-    const float playAfter = 0.1f;
+    const float playAfter = 0.15f;
     private bool time = false;
     private float timer;
     private ParticleSystem particleEffect;
@@ -51,12 +51,14 @@ public class WallBehaivour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        time = true;
+        if (other.CompareTag("PacStuCollider"))
+            time = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        time = false;
+        if (other.CompareTag( "PacStuCollider"))
+            time = false;
     }
 
 }

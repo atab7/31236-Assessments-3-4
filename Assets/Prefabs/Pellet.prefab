@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7054062293619002056}
   - component: {fileID: 7054062293619002057}
+  - component: {fileID: 3979625568179079190}
   m_Layer: 0
   m_Name: Pellet
   m_TagString: Pellet
@@ -30,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7054062293619002057
 SpriteRenderer:
@@ -84,3 +85,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!65 &3979625568179079190
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7054062293619002058}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.074009836, y: 0.07432747, z: 0.2}
+  m_Center: {x: -0.06369167, y: -0.05919504, z: 0}
