@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PacStudentController : MonoBehaviour
 {
@@ -10,16 +11,17 @@ public class PacStudentController : MonoBehaviour
     [SerializeField] private AudioClip walkingSound;
     public AudioClip eatingSound;
     public AudioSource audioSource;
-    private Vector3 currentInput;
-    private Vector3 lastInput;
-    private Vector3 targetPosition;
-    private Vector3 startPosition;
+    private Vector3 currentInput = Vector3.zero;
+    private Vector3 lastInput = Vector3.zero;
+    private Vector3 targetPosition = Vector3.zero;
+    private Vector3 startPosition = Vector3.zero;
     private float elapsedTime;
     private const float duration = 0.5f;
     private int currRow = 1;
     private int currCol = 1;
     Vector3[,] grid;
     private GameObject pacStuCollider;
+    
     private bool teleportNow = false;
 
 
@@ -46,6 +48,7 @@ public class PacStudentController : MonoBehaviour
     void Start()
     {
         pacStuCollider = GameObject.FindGameObjectWithTag("PacStuCollider");
+        
         audioSource = GetComponent<AudioSource>();
         CompleteMap();
         animator = gameObject.GetComponent<Animator>();
@@ -59,7 +62,7 @@ public class PacStudentController : MonoBehaviour
     }
     void MovePacStu()
     {
-        if (lastInput == null || startPosition == null || targetPosition == null)
+        if (lastInput == Vector3.zero && startPosition == Vector3.zero && targetPosition == Vector3.zero)
             return;
 
         if (teleportNow)
@@ -171,6 +174,19 @@ public class PacStudentController : MonoBehaviour
     public void setTeleportNow(bool val)
     {
         teleportNow = val;
+    }
+
+    public void ResetPacStu()
+    {
+        lastInput = Vector3.zero;
+        currentInput = Vector3.zero;
+        startPosition = Vector3.zero;
+        targetPosition = Vector3.zero;
+
+        currCol = 1;
+        currRow = 1;
+        transform.position = grid[currRow, currCol];
+        animator.SetInteger("Direction", 0);
     }
 
     void RotateCollider(Vector3 direction)

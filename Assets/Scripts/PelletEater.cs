@@ -9,98 +9,30 @@ public class PelletEater : MonoBehaviour
     private const int scorePerCherry = 100;
     private PacStudentController pacStuController;
     private InGameUIController UIcontroller;
-    private Animator ghost1Anim;
-    private Animator ghost2Anim;
-    private Animator ghost3Anim;
-    private Animator ghost4Anim;
-    private bool ghostsScared = false;
-    private bool ghostsRecovering = false;
-    private float timer = 10f;
-    private AudioSource camAudio;
-    [SerializeField] private AudioClip ghostsScaredMusic;
-    private AudioClip normalBackground;
+    private GhostStateController ghostStateController;
+    private GameObject resetEffectObj;
+    private ParticleSystem resetEffect;
+
 
     // Start is called before the first frame update
     void Start()
     {
         UIcontroller = GameObject.FindGameObjectWithTag("HUD").GetComponent<InGameUIController>();
+        ghostStateController = GameObject.FindGameObjectWithTag("GhostManager").GetComponent<GhostStateController>();
         pacStuController = GetComponent<PacStudentController>();
         score = 0;
-        camAudio = Camera.main.GetComponent<AudioSource>();
-        normalBackground = camAudio.clip;
-        ghost1Anim = GameObject.FindGameObjectWithTag("Ghost1").GetComponent<Animator>();
-        ghost2Anim = GameObject.FindGameObjectWithTag("Ghost2").GetComponent<Animator>();
-        ghost3Anim = GameObject.FindGameObjectWithTag("Ghost3").GetComponent<Animator>();
-        ghost4Anim = GameObject.FindGameObjectWithTag("Ghost4").GetComponent<Animator>();
+        resetEffectObj = GameObject.FindGameObjectWithTag("ResetEffect");
+        resetEffect = resetEffectObj.GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UIcontroller.ShowRemainingScaredGhostTime(timer);
-
-        if (ghostsScared)
-        {
-            if (timer == 10f)
-                ScareGhosts();
-
-            timer -= Time.deltaTime;
-
-            if (timer <= 3.0f)
-            {
-                RecoverGhosts();
-                ghostsScared = false;
-                ghostsRecovering = true;
-            }
-        }
-        else if (ghostsRecovering)
-        {
-            timer -= Time.deltaTime;
-            if (timer <= 0f)
-            {
-                DescalateGhosts();
-                timer = 10f;
-                ghostsRecovering = false;
-            }
-        }
-
+        if (!resetEffect.isPlaying)
+            resetEffectObj.transform.position = transform.position;
     }
 
-    private void ScareGhosts()
-    {
-        camAudio.Stop();
-        camAudio.clip = ghostsScaredMusic;
-        camAudio.loop = true;
-        camAudio.Play();
-        ghost1Anim.SetBool("isScared", true);
-        ghost2Anim.SetBool("isScared", true);
-        ghost3Anim.SetBool("isScared", true);
-        ghost4Anim.SetBool("isScared", true);
-    }
-
-    private void DescalateGhosts()
-    {
-        camAudio.Stop();
-        camAudio.clip = normalBackground;
-        camAudio.loop = true;
-        camAudio.Play();
-        ghost1Anim.SetBool("isRecovering", false);
-        ghost2Anim.SetBool("isRecovering", false);
-        ghost3Anim.SetBool("isRecovering", false);
-        ghost4Anim.SetBool("isRecovering", false);
-    }
-
-    private void RecoverGhosts()
-    {
-        ghost1Anim.SetBool("isScared", false);
-        ghost2Anim.SetBool("isScared", false);
-        ghost3Anim.SetBool("isScared", false);
-        ghost4Anim.SetBool("isScared", false);
-        ghost1Anim.SetBool("isRecovering", true);
-        ghost2Anim.SetBool("isRecovering", true);
-        ghost3Anim.SetBool("isRecovering", true);
-        ghost4Anim.SetBool("isRecovering", true);
-    }
+    
 
     private void OnTriggerEnter(Collider other)
     {
@@ -120,9 +52,40 @@ public class PelletEater : MonoBehaviour
         }
         else if (other.CompareTag("PowerPellet"))
         {
-            ghostsScared = true;
+            ghostStateController.StartScaredSequence();
             Destroy(other.gameObject);
-            timer = 10f;
+        }
+
+        if (ghostStateController.scareSeqPlaying)
+        {
+            if (other.CompareTag("Ghost1"))
+            {
+                ghostStateController.KillGhost(1);
+                score += 300;
+            }
+            else if (other.CompareTag("Ghost2"))
+            {
+                ghostStateController.KillGhost(2);
+                score += 300;
+            }
+            else if (other.CompareTag("Ghost3"))
+            {
+                ghostStateController.KillGhost(3);
+                score += 300;
+            }
+            else if (other.CompareTag("Ghost4"))
+            {
+                ghostStateController.KillGhost(4);
+                score += 300;
+            }
+        }
+        else
+        {
+            if (other.CompareTag("Ghost1") || other.CompareTag("Ghost2") || other.CompareTag("Ghost3") || other.CompareTag("Ghost4"))
+            {
+                resetEffect.Play();
+                pacStuController.ResetPacStu();
+            }
         }
     }
 }
