@@ -60,6 +60,26 @@ public class PacStuLifeController : MonoBehaviour
         transform.localScale = Vector3.Lerp(startScale, targetScale, ratio);
     }
 
+    void SaveHighScore()
+    {
+        int prevHighScore = PlayerPrefs.GetInt("PacStu-HighScore", 0);
+        float prevTime = PlayerPrefs.GetInt("PacStu-TopTime", 0);
+        if (eater.score > prevHighScore)
+        {
+            PlayerPrefs.SetInt("PacStu-HighScore", eater.score);
+            PlayerPrefs.SetFloat("PacStu-TopTime", uiController.timer);
+            PlayerPrefs.Save();
+        }
+        else if (eater.score == prevHighScore)
+        {
+            if (uiController.timer < prevTime)
+            {
+                PlayerPrefs.SetFloat("PacStu-TopTime", uiController.timer);
+                PlayerPrefs.Save();
+            }
+        }
+    }
+
     public void GameOver()
     {
         if (!isGameOver)
@@ -74,8 +94,7 @@ public class PacStuLifeController : MonoBehaviour
                 audioSource.Play();
             }
             GameObject.FindGameObjectWithTag("PacStuCollider").GetComponent<BoxCollider>().enabled = false;
-            eater.UpdateHighScore();
-            uiController.UpdateTopTime();
+            SaveHighScore();
             startPosition = transform.position;
             
         }

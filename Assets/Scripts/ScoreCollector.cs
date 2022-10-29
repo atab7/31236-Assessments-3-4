@@ -19,7 +19,7 @@ public class ScoreCollector : MonoBehaviour
         highScore.text = "HIGH SCORE\n" +  PlayerPrefs.GetInt("PacStu-HighScore", 0).ToString();
         
         float topFTime = PlayerPrefs.GetFloat("PacStu-TopTime", 0f);
-        topTime.text = "TOP TIME\n" + TimeSpan.FromSeconds(topFTime).ToString("mm':'ss':'fff");
+        topTime.text = "TIME\n" + TimeSpan.FromSeconds(topFTime).ToString("mm':'ss':'fff");
 
     }
 

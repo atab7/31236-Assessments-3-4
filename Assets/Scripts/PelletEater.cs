@@ -50,16 +50,6 @@ public class PelletEater : MonoBehaviour
 
     }
 
-    public void UpdateHighScore()
-    {
-        int prevHighScore = PlayerPrefs.GetInt("PacStu-HighScore", 0);
-        if (score > prevHighScore)
-        {
-            PlayerPrefs.SetInt("PacStu-HighScore", score);
-            PlayerPrefs.Save();
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Pellet"))
@@ -86,6 +76,7 @@ public class PelletEater : MonoBehaviour
         {
             if (ghostStateController.IsGhostDeadly(1))
             {
+                UIcontroller.UpdateLifeIndicator();
                 PlayDeathSound();
                 resetEffect.Play();
                 lifeController.takeLife();
@@ -102,6 +93,7 @@ public class PelletEater : MonoBehaviour
         {
             if (ghostStateController.IsGhostDeadly(2))
             {
+                UIcontroller.UpdateLifeIndicator();
                 PlayDeathSound();
                 resetEffect.Play();
                 lifeController.takeLife();
@@ -118,6 +110,7 @@ public class PelletEater : MonoBehaviour
         {
             if (ghostStateController.IsGhostDeadly(3))
             {
+                UIcontroller.UpdateLifeIndicator();
                 PlayDeathSound();
                 resetEffect.Play();
                 lifeController.takeLife();
@@ -134,6 +127,7 @@ public class PelletEater : MonoBehaviour
         {
             if (ghostStateController.IsGhostDeadly(4))
             {
+                UIcontroller.UpdateLifeIndicator();
                 PlayDeathSound();
                 resetEffect.Play();
                 lifeController.takeLife();

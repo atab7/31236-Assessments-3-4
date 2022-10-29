@@ -12624,7 +12624,7 @@ GameObject:
   - component: {fileID: 357094177}
   m_Layer: 0
   m_Name: TeleporterRight
-  m_TagString: Untagged
+  m_TagString: Teleporter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25362,7 +25362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2258239717971650552, guid: b4254664298423f41ab83d9ea71c487f, type: 3}
       propertyPath: m_TagString
-      value: Teleporter
+      value: LifeIndicator
       objectReference: {fileID: 0}
     - target: {fileID: 2258239717971650553, guid: b4254664298423f41ab83d9ea71c487f, type: 3}
       propertyPath: m_Pivot.x
@@ -47459,6 +47459,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   go: 0
+  lifeIndicatorSprites:
+  - {fileID: 2071904124, guid: 13c2d7354e7893a49a807f4b03364a80, type: 3}
+  - {fileID: -450738942, guid: 13c2d7354e7893a49a807f4b03364a80, type: 3}
 --- !u!1001 &1687331140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48279,7 +48282,7 @@ GameObject:
   - component: {fileID: 1749028866}
   m_Layer: 0
   m_Name: TeleporterLeft
-  m_TagString: Untagged
+  m_TagString: Teleporter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62171,7 +62174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2258239717971650552, guid: b4254664298423f41ab83d9ea71c487f, type: 3}
       propertyPath: m_TagString
-      value: Teleporter
+      value: LifeIndicator
       objectReference: {fileID: 0}
     - target: {fileID: 2258239717971650553, guid: b4254664298423f41ab83d9ea71c487f, type: 3}
       propertyPath: m_Pivot.x
@@ -62256,6 +62259,18 @@ PrefabInstance:
     - target: {fileID: 2258239717971650553, guid: b4254664298423f41ab83d9ea71c487f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258239717971650554, guid: b4254664298423f41ab83d9ea71c487f, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258239717971650554, guid: b4254664298423f41ab83d9ea71c487f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1393151142, guid: 13c2d7354e7893a49a807f4b03364a80, type: 3}
+    - target: {fileID: 2258239717971650554, guid: b4254664298423f41ab83d9ea71c487f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class InGameUIController : MonoBehaviour
 {
@@ -10,10 +11,13 @@ public class InGameUIController : MonoBehaviour
     private TextMeshProUGUI ghostTimer;
     private TextMeshProUGUI gameTimer;
     private TextMeshProUGUI counter;
-    private float timer;
+    public float timer = 0f;
     private bool keepTime = true;
     public bool go = false;
     private AudioSource camAudio;
+    public Sprite[] lifeIndicatorSprites;
+    private Image[] indicatorImageRefs;
+    int indicatorIndex = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +28,13 @@ public class InGameUIController : MonoBehaviour
         ghostTimer = GameObject.FindGameObjectWithTag("GhostTimer").GetComponent<TextMeshProUGUI>();
         gameTimer = GameObject.FindGameObjectWithTag("GameTimer").GetComponent<TextMeshProUGUI>();
         camAudio = Camera.main.GetComponent<AudioSource>();
+        
+        GameObject[] lifeIndicators = GameObject.FindGameObjectsWithTag("LifeIndicator");
+        indicatorImageRefs = new Image[lifeIndicators.Length];
+        for (int i = 0; i < lifeIndicators.Length; i++)
+        {
+            indicatorImageRefs[i] = lifeIndicators[i].GetComponent<Image>();
+        }
     }
 
     // Update is called once per frame
@@ -39,6 +50,27 @@ public class InGameUIController : MonoBehaviour
             gameTimer.text = "TIME\n" + TimeSpan.FromSeconds(timer).ToString("mm':'ss':'fff");
         }
     }
+
+    public void UpdateLifeIndicator()
+    {
+        if (indicatorIndex < lifeIndicatorSprites.Length)
+        {
+            for (int i = 0; i < indicatorImageRefs.Length; i++)
+            {
+                indicatorImageRefs[i].sprite = lifeIndicatorSprites[indicatorIndex];
+            }
+            indicatorIndex++;
+        }
+        else if (indicatorIndex == lifeIndicatorSprites.Length)
+        {
+            for (int i = 0; i < indicatorImageRefs.Length; i++)
+            {
+                indicatorImageRefs[i].enabled = false;
+            }
+            indicatorIndex++;
+        }
+    }
+
 
     void CountDown()
     {
@@ -80,13 +112,4 @@ public class InGameUIController : MonoBehaviour
         counter.text = "GAME OVER!";
     }
 
-    public void UpdateTopTime()
-    {
-        float prevTopTime = PlayerPrefs.GetFloat("PacStu-TopTime", 0f);
-        if (timer > prevTopTime)
-        {
-            PlayerPrefs.SetFloat("PacStu-TopTime", timer);
-            PlayerPrefs.Save();
-        }
-    }
 }
