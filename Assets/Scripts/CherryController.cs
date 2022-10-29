@@ -11,6 +11,7 @@ public class CherryController : MonoBehaviour
     const float duration = 8.0f;
     private Vector3 startPos;
     private Vector3 endPos;
+    private InGameUIController uIController;
 
 
     // Start is called before the first frame update
@@ -18,13 +19,15 @@ public class CherryController : MonoBehaviour
     {
         elapsedTime = 0;
         timeSinceLastSpawn = 0;
-        
+        uIController = GameObject.FindGameObjectWithTag("HUD").GetComponent<InGameUIController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        timeSinceLastSpawn += Time.deltaTime;
+        if (uIController.go)
+            timeSinceLastSpawn += Time.deltaTime;
+
         if (timeSinceLastSpawn >= 10.0f)
         {
             Spawn();

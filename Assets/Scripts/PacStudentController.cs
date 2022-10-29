@@ -6,24 +6,25 @@ using System;
 public class PacStudentController : MonoBehaviour
 {
 
-    [SerializeField] private ParticleSystem dustEffect;
     private Animator animator;
     [SerializeField] private AudioClip walkingSound;
+    private GameObject dustEffectObj;
+    private ParticleSystem dustEffect;
     public AudioClip eatingSound;
     public AudioSource audioSource;
-    private Vector3 currentInput = Vector3.zero;
-    private Vector3 lastInput = Vector3.zero;
-    private Vector3 targetPosition = Vector3.zero;
-    private Vector3 startPosition = Vector3.zero;
+    private Vector3 currentInput;
+    private Vector3 lastInput;
+    private Vector3 targetPosition;
+    private Vector3 startPosition;
     private float elapsedTime;
-    private const float duration = 0.5f;
+    private const float duration = 0.08f;
     private int currRow = 1;
     private int currCol = 1;
     Vector3[,] grid;
     private GameObject pacStuCollider;
-    
     private bool teleportNow = false;
-
+    private InGameUIController uiController;
+    private PacStuLifeController lifeController;
 
     int[,] levelMap =
     {
@@ -48,21 +49,27 @@ public class PacStudentController : MonoBehaviour
     void Start()
     {
         pacStuCollider = GameObject.FindGameObjectWithTag("PacStuCollider");
-        
+        uiController = GameObject.FindGameObjectWithTag("HUD").GetComponent<InGameUIController>();
+        dustEffectObj = GameObject.FindGameObjectWithTag("PacStuDustEffect");
+        dustEffect = dustEffectObj.GetComponent<ParticleSystem>();
         audioSource = GetComponent<AudioSource>();
         CompleteMap();
         animator = gameObject.GetComponent<Animator>();
+        lifeController = GetComponent<PacStuLifeController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!uiController.go || lifeController.isGameOver)
+            return;
+
         GetInput();
         MovePacStu();
     }
     void MovePacStu()
     {
-        if (lastInput == Vector3.zero && startPosition == Vector3.zero && targetPosition == Vector3.zero)
+        if (lastInput == null)
             return;
 
         if (teleportNow)
@@ -72,11 +79,11 @@ public class PacStudentController : MonoBehaviour
             return;
         }
 
-        if (Vector3.Distance(startPosition, targetPosition) > 0.1f)
+        if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
         {
+            PlayDustEffect();
             PlayAudio();
             LerpPacStu();
-            PlayDustEffect();
             return;
         }
         else
@@ -87,18 +94,19 @@ public class PacStudentController : MonoBehaviour
 
         if (!WallExists(lastInput))
         {
-            
             UpdateMapPosition(lastInput);
+            startPosition = transform.position;
             targetPosition = grid[currRow, currCol];
             currentInput = lastInput;
             SetAnimatorParam(lastInput);
-            RotateCollider(lastInput);
+            RotateChildren(lastInput);
         }
         else
         {
             if (!WallExists(currentInput))
             {
                 UpdateMapPosition(currentInput);
+                startPosition = transform.position;
                 targetPosition = grid[currRow, currCol];
             }
             
@@ -180,32 +188,36 @@ public class PacStudentController : MonoBehaviour
     {
         lastInput = Vector3.zero;
         currentInput = Vector3.zero;
-        startPosition = Vector3.zero;
-        targetPosition = Vector3.zero;
 
         currCol = 1;
         currRow = 1;
+        startPosition = grid[currRow, currCol];
+        targetPosition = grid[currRow, currCol];
         transform.position = grid[currRow, currCol];
         animator.SetInteger("Direction", 0);
     }
 
-    void RotateCollider(Vector3 direction)
+    void RotateChildren(Vector3 direction)
     {
         if (direction == Vector3.right)
         {
             pacStuCollider.transform.rotation = Quaternion.Euler(0, 0, 0);
+            dustEffectObj.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else if (direction == Vector3.left)
         {
             pacStuCollider.transform.rotation = Quaternion.Euler(0, 0, 180);
+            dustEffectObj.transform.rotation = Quaternion.Euler(0, 0, 180);
         }
         else if (direction == Vector3.up)
         {
             pacStuCollider.transform.rotation = Quaternion.Euler(0, 0, 90);
+            dustEffectObj.transform.rotation = Quaternion.Euler(0, 0, 90);
         }
         else if (direction == Vector3.down)
         {
             pacStuCollider.transform.rotation = Quaternion.Euler(0, 0, 270);
+            dustEffectObj.transform.rotation = Quaternion.Euler(0, 0, 270);
         }
     }
 
@@ -225,6 +237,8 @@ public class PacStudentController : MonoBehaviour
 
     void PlayDustEffect()
     {
+        var main = dustEffect.main;
+        main.simulationSpeed = 3f;
         dustEffect.Play();
     }
 
@@ -276,7 +290,6 @@ public class PacStudentController : MonoBehaviour
     {
         elapsedTime += Time.deltaTime;
         float ratio = elapsedTime / duration;
-        startPosition = transform.position;
         transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
     }
 
@@ -387,6 +400,8 @@ public class PacStudentController : MonoBehaviour
             }
         }
         transform.position = grid[1, 1];
+        targetPosition = transform.position;
+        startPosition = transform.position;
 
         /*
         string str = "";

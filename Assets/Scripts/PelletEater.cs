@@ -12,6 +12,11 @@ public class PelletEater : MonoBehaviour
     private GhostStateController ghostStateController;
     private GameObject resetEffectObj;
     private ParticleSystem resetEffect;
+    private PacStuLifeController lifeController;
+    private AudioSource audioSource;
+    public AudioClip[] deathSoundClips;
+    private int deathSoundClipsIndex = 0;
+
 
 
     // Start is called before the first frame update
@@ -23,6 +28,8 @@ public class PelletEater : MonoBehaviour
         score = 0;
         resetEffectObj = GameObject.FindGameObjectWithTag("ResetEffect");
         resetEffect = resetEffectObj.GetComponent<ParticleSystem>();
+        lifeController = GetComponent<PacStuLifeController>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -32,7 +39,26 @@ public class PelletEater : MonoBehaviour
             resetEffectObj.transform.position = transform.position;
     }
 
-    
+    void PlayDeathSound()
+    {
+        if (deathSoundClipsIndex < deathSoundClips.Length)
+        {
+            audioSource.Stop();
+            audioSource.PlayOneShot(deathSoundClips[deathSoundClipsIndex], 0.3f);
+            deathSoundClipsIndex++;
+        }
+
+    }
+
+    public void UpdateHighScore()
+    {
+        int prevHighScore = PlayerPrefs.GetInt("PacStu-HighScore", 0);
+        if (score > prevHighScore)
+        {
+            PlayerPrefs.SetInt("PacStu-HighScore", score);
+            PlayerPrefs.Save();
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -41,6 +67,7 @@ public class PelletEater : MonoBehaviour
             score += scorePerPellet;
             Destroy(other.gameObject);
             UIcontroller.ChangeScore(score);
+            lifeController.registerPellet();
         }
         else if (other.CompareTag("Cherry"))
         {
@@ -55,36 +82,68 @@ public class PelletEater : MonoBehaviour
             ghostStateController.StartScaredSequence();
             Destroy(other.gameObject);
         }
-
-        if (ghostStateController.scareSeqPlaying)
+        else if (other.CompareTag("Ghost1"))
         {
-            if (other.CompareTag("Ghost1"))
+            if (ghostStateController.IsGhostDeadly(1))
+            {
+                PlayDeathSound();
+                resetEffect.Play();
+                lifeController.takeLife();
+                pacStuController.ResetPacStu();
+            }
+            else if (ghostStateController.IsGhostKillable(1))
             {
                 ghostStateController.KillGhost(1);
                 score += 300;
+                UIcontroller.ChangeScore(score);
             }
-            else if (other.CompareTag("Ghost2"))
+        }
+        else if (other.CompareTag("Ghost2"))
+        {
+            if (ghostStateController.IsGhostDeadly(2))
+            {
+                PlayDeathSound();
+                resetEffect.Play();
+                lifeController.takeLife();
+                pacStuController.ResetPacStu();
+            }
+            else if (ghostStateController.IsGhostKillable(2))
             {
                 ghostStateController.KillGhost(2);
                 score += 300;
+                UIcontroller.ChangeScore(score);
             }
-            else if (other.CompareTag("Ghost3"))
+        }
+        else if (other.CompareTag("Ghost3"))
+        {
+            if (ghostStateController.IsGhostDeadly(3))
+            {
+                PlayDeathSound();
+                resetEffect.Play();
+                lifeController.takeLife();
+                pacStuController.ResetPacStu();
+            }
+            else if (ghostStateController.IsGhostKillable(3))
             {
                 ghostStateController.KillGhost(3);
                 score += 300;
+                UIcontroller.ChangeScore(score);
             }
-            else if (other.CompareTag("Ghost4"))
+        }
+        else if (other.CompareTag("Ghost4"))
+        {
+            if (ghostStateController.IsGhostDeadly(4))
+            {
+                PlayDeathSound();
+                resetEffect.Play();
+                lifeController.takeLife();
+                pacStuController.ResetPacStu();
+            }
+            else if (ghostStateController.IsGhostKillable(4))
             {
                 ghostStateController.KillGhost(4);
                 score += 300;
-            }
-        }
-        else
-        {
-            if (other.CompareTag("Ghost1") || other.CompareTag("Ghost2") || other.CompareTag("Ghost3") || other.CompareTag("Ghost4"))
-            {
-                resetEffect.Play();
-                pacStuController.ResetPacStu();
+                UIcontroller.ChangeScore(score);
             }
         }
     }
