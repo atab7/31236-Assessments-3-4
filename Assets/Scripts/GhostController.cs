@@ -25,6 +25,7 @@ public class GhostController : MonoBehaviour
     private GameObject PacStudent;
     private float inputTimer = 1.5f;
     private int exitSeq = 13;
+    public bool isDead = false;
 
     int[,] levelMap =
     {
@@ -62,13 +63,14 @@ public class GhostController : MonoBehaviour
     {
         if (!uiController.go || lifeController.isGameOver)
             return;
-
-        GetInput();
-        MoveGhost();
+        
+        if (!isDead) 
+            GetInput();
+            MoveGhost();
     }
     void MoveGhost()
     {
-        if (lastInput == null)
+        if (lastInput == null || isDead)
             return;
 
         if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
@@ -110,12 +112,12 @@ public class GhostController : MonoBehaviour
     {
         lastInput = Vector3.zero;
         currentInput = Vector3.zero;
-
-        currCol = resetRow;
-        currRow = resetColumn;
-        startPosition = grid[currRow, currCol];
-        targetPosition = grid[currRow, currCol];
-        transform.position = grid[currRow, currCol];
+        exitSeq = 13;
+        currCol = startMovingCol;
+        currRow = startMovingRow;
+        startPosition = grid[resetRow, resetColumn];
+        targetPosition = grid[resetRow, resetColumn];
+        transform.position = grid[resetRow, resetColumn];
         animator.SetInteger("Direction", 0);
     }
 
@@ -411,7 +413,6 @@ public class GhostController : MonoBehaviour
             }
         }
         transform.position = grid[resetRow, resetColumn];
-        //targetPosition = transform.position;
-        //startPosition = transform.position;
+
     }
 }

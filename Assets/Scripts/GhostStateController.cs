@@ -23,6 +23,7 @@ public class GhostStateController : MonoBehaviour
     [SerializeField] private AudioClip ghostDeadMusic;
     private AudioClip normalBackground;
     private PacStuLifeController lifeController;
+    private GhostController ghost1Controller, ghost2Controller, ghost3Controller, ghost4Controller;
 
     // Start is called before the first frame update
     void Start()
@@ -31,15 +32,19 @@ public class GhostStateController : MonoBehaviour
         
         GameObject ghost1 = GameObject.FindGameObjectWithTag("Ghost1");
         ghost1Anim = ghost1.GetComponent<Animator>();
+        ghost1Controller = ghost1.GetComponent<GhostController>();
         
         GameObject ghost2 = GameObject.FindGameObjectWithTag("Ghost2");
         ghost2Anim = ghost2.GetComponent<Animator>();
+        ghost2Controller = ghost2.GetComponent<GhostController>();
 
         GameObject ghost3 = GameObject.FindGameObjectWithTag("Ghost3");
         ghost3Anim = ghost3.GetComponent<Animator>();
+        ghost3Controller = ghost3.GetComponent<GhostController>();
 
         GameObject ghost4 = GameObject.FindGameObjectWithTag("Ghost4");
         ghost4Anim = ghost4.GetComponent<Animator>();
+        ghost4Controller = ghost4.GetComponent<GhostController>();
 
         camAudio = Camera.main.GetComponent<AudioSource>();
         normalBackground = camAudio.clip;
@@ -199,6 +204,8 @@ public class GhostStateController : MonoBehaviour
             ghost1Anim.SetBool("isDead", true);
             ghost1Anim.SetBool("isScared", false);
             ghost1Anim.SetBool("isRecovering", false);
+            ghost1Controller.isDead = true;
+            ghost1Controller.ResetGhost();
             ChangeBackgroundMusicToGhostDeath();
         }
         else if (ghostID == 2 && IsGhostKillable(2))
@@ -206,6 +213,8 @@ public class GhostStateController : MonoBehaviour
             ghost2Anim.SetBool("isDead", true);
             ghost2Anim.SetBool("isScared", false);
             ghost2Anim.SetBool("isRecovering", false);
+            ghost2Controller.isDead = true;
+            ghost2Controller.ResetGhost();
             ChangeBackgroundMusicToGhostDeath();
         }
         else if (ghostID == 3 && IsGhostKillable(3))
@@ -213,6 +222,8 @@ public class GhostStateController : MonoBehaviour
             ghost3Anim.SetBool("isDead", true);
             ghost3Anim.SetBool("isScared", false);
             ghost3Anim.SetBool("isRecovering", false);
+            ghost3Controller.isDead = true;
+            ghost3Controller.ResetGhost();
             ChangeBackgroundMusicToGhostDeath();
         }
         else if (ghostID == 4 && IsGhostKillable(4))
@@ -220,6 +231,8 @@ public class GhostStateController : MonoBehaviour
             ghost4Anim.SetBool("isDead", true);
             ghost4Anim.SetBool("isScared", false);
             ghost4Anim.SetBool("isRecovering", false);
+            ghost4Controller.isDead = true;
+            ghost4Controller.ResetGhost();
             ChangeBackgroundMusicToGhostDeath();
         }
     }
@@ -230,21 +243,25 @@ public class GhostStateController : MonoBehaviour
         {
             G1deathTimer = 5;
             ghost1Anim.SetBool("isDead", false);
+            ghost1Controller.isDead = false;
         }
         else if (ghostID == 2)
         {
             G2deathTimer = 5;
             ghost2Anim.SetBool("isDead", false);
+            ghost2Controller.isDead = false;
         }
         else if (ghostID == 3)
         {
             G3deathTimer = 5;
             ghost3Anim.SetBool("isDead", false);
+            ghost3Controller.isDead = false;
         }
         else if (ghostID == 4)
         {
             G4deathTimer = 5;
             ghost4Anim.SetBool("isDead", false);
+            ghost4Controller.isDead = false;
         }
 
         if (G1deathTimer + G2deathTimer + G3deathTimer + G4deathTimer == 20f)
