@@ -4417,6 +4417,7 @@ GameObject:
   m_Component:
   - component: {fileID: 197187831}
   - component: {fileID: 197187832}
+  - component: {fileID: 197187833}
   m_Layer: 0
   m_Name: GhostManager
   m_TagString: GhostManager
@@ -4454,6 +4455,18 @@ MonoBehaviour:
   scareSeqPlaying: 0
   ghostsScaredMusic: {fileID: 8300000, guid: 22d51da8f8e1d924ebb47adf59953878, type: 3}
   ghostDeadMusic: {fileID: 8300000, guid: 896a90e1fdc19c14e96011159f21b6cc, type: 3}
+--- !u!114 &197187833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197187830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ded9d6b767e96f488c2f550f08288a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &198606780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19757,8 +19770,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8758021, y: 0.8904861, z: 0.2}
-  m_Center: {x: -0.14434765, y: 0.090886205, z: 0}
+  m_Size: {x: 0.8758024, y: 0.87230825, z: 0.2}
+  m_Center: {x: -0.14434761, y: -0.000016501363, z: 0}
 --- !u!1001 &641730451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20201,8 +20214,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.89918244, y: 0.90893793, z: 0.2}
-  m_Center: {x: -0.158665, y: 0.0999009, z: 0}
+  m_Size: {x: 0.8789582, y: 0.87257886, z: 0.2}
+  m_Center: {x: 0.0030457221, y: 0.008999843, z: 0}
 --- !u!1001 &652184588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28031,7 +28044,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.16, y: 0.38000563}
+  m_AnchoredPosition: {x: -0.15, y: 0.307}
   m_SizeDelta: {x: 16, y: 26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &961549946
@@ -29330,7 +29343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.16, y: 0.38000563}
+  m_AnchoredPosition: {x: 0, y: 0.289}
   m_SizeDelta: {x: 16, y: 26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1014236860
@@ -41968,7 +41981,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.15, y: 0.37}
+  m_AnchoredPosition: {x: -0.11, y: 0.279}
   m_SizeDelta: {x: 16, y: 26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1392139008
@@ -47458,6 +47471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72cc43628cdb3db40ad0bbd86646030b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timer: 0
   go: 0
   lifeIndicatorSprites:
   - {fileID: 2071904124, guid: 13c2d7354e7893a49a807f4b03364a80, type: 3}
@@ -59659,8 +59673,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.85158545, y: 0.90893465, z: 0.2}
-  m_Center: {x: -0.16661254, y: 0.09990255, z: 0}
+  m_Size: {x: 0.8819078, y: 0.8725755, z: 0.2}
+  m_Center: {x: -0.10091854, y: 0.009001493, z: 0}
 --- !u!1001 &2054738097
 PrefabInstance:
   m_ObjectHideFlags: 0
