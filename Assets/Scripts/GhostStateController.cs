@@ -285,9 +285,13 @@ public class GhostStateController : MonoBehaviour
 
     private void ScareGhosts()
     {
-        camAudio.Stop();
-        camAudio.clip = ghostsScaredMusic;
-        camAudio.Play();
+        if (!ghost1Anim.GetBool("isDead") && !ghost2Anim.GetBool("isDead") && !ghost3Anim.GetBool("isDead") && !ghost4Anim.GetBool("isDead"))
+        {
+            camAudio.Stop();
+            camAudio.clip = ghostsScaredMusic;
+            camAudio.Play();
+        }
+
         ghost1Anim.SetBool("isScared", true);
         ghost2Anim.SetBool("isScared", true);
         ghost3Anim.SetBool("isScared", true);
