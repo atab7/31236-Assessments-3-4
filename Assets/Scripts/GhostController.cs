@@ -1,9 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GhostController : MonoBehaviour
 {
+
+    private Animator animator;
+    private Vector3 currentInput = Vector3.up;
+    private Vector3 lastInput;
+    private Vector3 targetPosition;
+    private Vector3 startPosition;
+    private float elapsedTime;
+    private const float duration = 0.1f;
+    private int currRow;
+    private int currCol;
+    private int startMovingRow = 11;
+    private int startMovingCol = 13;
+    public int resetRow;
+    public int resetColumn;
+    Vector3[,] grid;
+    private InGameUIController uiController;
+    private PacStuLifeController lifeController;
+    private GameObject PacStudent;
+    private float inputTimer = 1.5f;
+    private int exitSeq = 13;
+
     int[,] levelMap =
     {
         {1,2,2,2,2,2,2,2,2,2,2,2,2,7},
@@ -22,24 +44,17 @@ public class GhostController : MonoBehaviour
         {2,2,2,2,2,1,5,3,3,0,4,0,0,0},
         {0,0,0,0,0,2,5,0,0,0,4,0,0,0},
     };
-    Vector3[,] grid;
-    GhostMovement ghost0, ghost1, ghost2, ghost3;
-    int ghostTurn = 3;
-    GhostMovement currentGhost;
-    InGameUIController uiController;
-    PacStuLifeController lifeController;
-    
 
     // Start is called before the first frame update
     void Start()
     {
         uiController = GameObject.FindGameObjectWithTag("HUD").GetComponent<InGameUIController>();
-        lifeController = GameObject.FindGameObjectWithTag("PacStudent").GetComponent<PacStuLifeController>();
-        ghost0 = new GhostMovement(1);
-        ghost1 = new GhostMovement(2);
-        ghost2 = new GhostMovement(3);
-        ghost3 = new GhostMovement(4);
         CompleteMap();
+        animator = gameObject.GetComponent<Animator>();
+        PacStudent = GameObject.FindGameObjectWithTag("PacStudent");
+        lifeController = PacStudent.GetComponent<PacStuLifeController>();
+        currRow = resetRow;
+        currCol = resetColumn;
     }
 
     // Update is called once per frame
@@ -48,22 +63,274 @@ public class GhostController : MonoBehaviour
         if (!uiController.go || lifeController.isGameOver)
             return;
 
-        ghostTurn = (ghostTurn + 1) % 4;
-        SetGhost();
+        GetInput();
+        MoveGhost();
+    }
+    void MoveGhost()
+    {
+        if (lastInput == null)
+            return;
 
-        if (currentGhost.isLerping)
+        if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
         {
-            currentGhost.MoveGhost();
-            CloseBarnDoor();
+            LerpGhost();
             return;
         }
-        else if (currentGhost.exitSeq >= 11)
+        elapsedTime = 0;
+
+
+        if (exitSeq >= 10)
         {
-            OpenBarnDoor();
-            CoordinateExit();
-            currentGhost.isLerping = true;
+            PlayExit();
+            return;
         }
-        //Debug.Log(currentGhost.ghostObj.transform.position + " " + grid[11, 13]);
+
+        if (!WallExists(lastInput))
+        {
+            UpdateMapPosition(lastInput);
+            startPosition = transform.position;
+            targetPosition = grid[currRow, currCol];
+            currentInput = lastInput;
+            SetAnimatorParam(lastInput);
+            RotateChildren(lastInput);
+        }
+        else
+        {
+            if (!WallExists(currentInput))
+            {
+                UpdateMapPosition(currentInput);
+                startPosition = transform.position;
+                targetPosition = grid[currRow, currCol];
+            }
+        }
+
+    }
+
+    public void ResetGhost()
+    {
+        lastInput = Vector3.zero;
+        currentInput = Vector3.zero;
+
+        currCol = resetRow;
+        currRow = resetColumn;
+        startPosition = grid[currRow, currCol];
+        targetPosition = grid[currRow, currCol];
+        transform.position = grid[currRow, currCol];
+        animator.SetInteger("Direction", 0);
+    }
+
+    void RotateChildren(Vector3 direction)
+    {
+        if (direction == Vector3.right)
+        {
+            gameObject.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else if (direction == Vector3.left)
+        {
+            gameObject.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else if (direction == Vector3.up)
+        {
+            gameObject.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 90);
+        }
+        else if (direction == Vector3.down)
+        {
+            gameObject.transform.GetChild(0).rotation = Quaternion.Euler(0, 0, 270);
+        }
+    }
+
+    void SetAnimatorParam(Vector3 direction)
+    {
+        if (direction == Vector3.right)
+        {
+            animator.SetInteger("Direction", 3);
+        }
+        else if (direction == Vector3.left)
+        {
+            animator.SetInteger("Direction", 9);
+        }
+        else if (direction == Vector3.up)
+        {
+            animator.SetInteger("Direction", 12);
+        }
+        else if (direction == Vector3.down)
+        {
+            animator.SetInteger("Direction", 6);
+        }
+    }
+
+
+    void GetInput()
+    {
+        if (inputTimer >= 1f)
+        {
+            List<Vector3> movableDirections = GetMovableDirections(currentInput);
+            if (movableDirections.Count > 0)
+            {
+                System.Random rnd = new System.Random();
+                int randIndex = rnd.Next(movableDirections.Count);
+                Vector3 random = movableDirections[randIndex];
+                lastInput = random;
+            }
+            else
+                lastInput = GetRandomDirection();
+  
+
+        }
+        else if (inputTimer <= 0)
+        {
+            inputTimer = 1f;
+        }
+        else
+        {
+            inputTimer -= Time.deltaTime;
+        }
+    }
+
+
+    private Vector3 GetRandomDirection()
+    {
+        List<Vector3> directions = new List<Vector3> { Vector3.up, Vector3.left, Vector3.right, Vector3.down };
+        System.Random rnd = new System.Random();
+        int randIndex = rnd.Next(directions.Count);
+        return directions[randIndex];
+    }
+
+    private List<Vector3> GetMovableDirections(Vector3 currentDirection)
+    {
+        if (gameObject.CompareTag("Ghost1"))
+        {
+            List<Vector3> movable = new List<Vector3>();
+            Vector3 vectorToPacStu = PacStudent.transform.position - gameObject.transform.position;
+            if (vectorToPacStu.x > 0)
+                movable.Add(Vector3.right);
+            else if (vectorToPacStu.x < 0)
+                movable.Add(Vector3.left);
+
+            if (vectorToPacStu.y > 0)
+                movable.Add(Vector3.up);
+            else if (vectorToPacStu.y < 0)
+                movable.Add(Vector3.down);
+
+            for (int i = 0; i < movable.Count; i++)
+            {
+                if (WallExists(movable[i]))
+                    movable[i] *= -1;
+            }
+
+            return movable;
+        }
+        else if (gameObject.CompareTag("Ghost2"))
+        {
+            List<Vector3> movable = new List<Vector3>();
+            Vector3 vectorToPacStu = PacStudent.transform.position - gameObject.transform.position;
+            if (vectorToPacStu.x > 0)
+                movable.Add(Vector3.left);
+            else if (vectorToPacStu.x < 0)
+                movable.Add(Vector3.right);
+
+            if (vectorToPacStu.y > 0)
+                movable.Add(Vector3.down);
+            else if (vectorToPacStu.y < 0)
+                movable.Add(Vector3.up);
+
+            for (int i = 0; i < movable.Count; i++)
+            {
+                if (WallExists(movable[i]))
+                    movable[i] *= -1;
+            }
+
+            return movable;
+        }
+        else if (gameObject.CompareTag("Ghost3") || gameObject.CompareTag("Ghost4"))
+        {
+            if (currentDirection == Vector3.up)
+                return new List<Vector3> { Vector3.up, Vector3.left, Vector3.right };
+
+            if (currentDirection == Vector3.down)
+                return new List<Vector3> { Vector3.down, Vector3.left, Vector3.right };
+
+            if (currentDirection == Vector3.left)
+                return new List<Vector3> { Vector3.up, Vector3.down, Vector3.left };
+
+            if (currentDirection == Vector3.right)
+                return new List<Vector3> { Vector3.up, Vector3.down, Vector3.right };
+        }
+
+        return new List<Vector3>();
+    }
+
+    private bool IsForbiddenTile(int row, int col)
+    {
+        if (row == 12 && col == 13)
+            return true;
+        if (row == 12 && col == 14)
+            return true;
+        if (row == 17 && col == 13)
+            return true;
+        if (row == 17 && col == 14)
+            return true;
+
+        return false;
+    }
+
+    void LerpGhost()
+    {
+        elapsedTime += Time.deltaTime;
+        float ratio = elapsedTime / duration;
+        transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
+    }
+
+
+    bool WallExists(Vector3 direction)
+    {
+        if (direction == Vector3.right)
+        {
+            if (isWall(levelMap[currRow, currCol + 1]) || IsForbiddenTile(currRow, currCol + 1))
+                return true;
+        }
+        else if (direction == Vector3.left)
+        {
+            if (isWall(levelMap[currRow, currCol - 1]) || IsForbiddenTile(currRow, currCol - 1))
+                return true;
+        }
+        else if (direction == Vector3.up)
+        {
+            if (isWall(levelMap[currRow - 1, currCol]) || IsForbiddenTile(currRow - 1, currCol))
+                return true;
+        }
+        else if (direction == Vector3.down)
+        {
+            if (isWall(levelMap[currRow + 1, currCol]) || IsForbiddenTile(currRow + 1, currCol))
+                return true;
+        }
+
+        return false;
+    }
+
+    private void PlayExit()
+    {
+        if (exitSeq >= 13)
+        {
+            startPosition = transform.position;
+            targetPosition = grid[13, 13];
+            exitSeq--;
+        }
+        else if (exitSeq >= 11)
+        {
+            startPosition = transform.position;
+            targetPosition = grid[exitSeq, 13];
+            exitSeq--;
+        }
+        else
+        {
+            currRow = startMovingRow;
+            currCol = startMovingCol;
+            transform.position = grid[currRow, currCol];
+            startPosition = transform.position;
+            targetPosition = transform.position;
+            exitSeq--;
+        }
     }
 
     private bool isWall(int i)
@@ -73,96 +340,24 @@ public class GhostController : MonoBehaviour
         return false;
     }
 
-    private void OpenBarnDoor()
+
+    private void UpdateMapPosition(Vector3 direction)
     {
-        levelMap[12, 13] = 0;
-        levelMap[12, 14] = 0;
-        levelMap[17, 13] = 0;
-        levelMap[17, 14] = 0;
-    }
-
-    private void CloseBarnDoor()
-    {
-        levelMap[12, 13] = 4;
-        levelMap[12, 14] = 4;
-        levelMap[17, 13] = 4;
-        levelMap[17, 14] = 4;
-    }
-
-    private List<CoordinatePair> getMovableTiles(int currRow, int currCol)
-    {
-        List<CoordinatePair> movableTiles = new List<CoordinatePair>();
-
-        int rows = levelMap.GetLength(0);
-        int cols = levelMap.GetLength(1);
-
-        if ((currRow + 1) < rows &&  !isWall(levelMap[currRow + 1, currCol]))
-            movableTiles.Add(new CoordinatePair(currRow + 1, currCol));
-
-        if ((currCol + 1) < cols && !isWall(levelMap[currRow, currCol + 1]))
-            movableTiles.Add(new CoordinatePair(currRow, currCol + 1));
-
-        if ((currRow - 1) >= 0 && !isWall(levelMap[currRow - 1, currCol]))
-            movableTiles.Add(new CoordinatePair(currRow - 1, currCol));
-
-        if ((currCol - 1) >= 0  && !isWall(levelMap[currRow, currCol - 1]))
-            movableTiles.Add(new CoordinatePair(currRow, currCol - 1 ));
-
-        return movableTiles;
-    }
-
-    private void SetGhost()
-    {
-        if (ghostTurn == 0)
-            this.currentGhost = ghost0;
-        else if (ghostTurn == 1)
-            this.currentGhost = ghost1;
-        else if (ghostTurn == 2)
-            this.currentGhost = ghost2;
-        else if (ghostTurn == 3)
-            this.currentGhost = ghost3;
-    }
-
-
-    public void CoordinateExit()
-    {
-        if (currentGhost.exitSeq >= 13)
+        if (direction == Vector3.right)
         {
-            SetGhostMovement(grid[13, 13], 13, 13);
-            currentGhost.exitSeq--;
+            currCol += 1;
         }
-        else if (currentGhost.exitSeq >= 11)
+        else if (direction == Vector3.left)
         {
-            SetGhostMovement(grid[currentGhost.exitSeq, 13], currentGhost.exitSeq, 13);
-            currentGhost.exitSeq--;
+            currCol -= 1;
         }
-    }
-
-    private void SetGhostMovement(Vector3 targetPosition, int targetRow, int targetCol)
-    {
-        currentGhost.SetStartPosition();
-        currentGhost.targetPosition = targetPosition;
-        currentGhost.currRow = targetRow;
-        currentGhost.currCol = targetCol;
-    }
-
-    private void PickTarget()
-    {
-        if (ghostTurn == 0)
+        else if (direction == Vector3.up)
         {
-
+            currRow -= 1;
         }
-        else if (ghostTurn == 1)
+        else if (direction == Vector3.down)
         {
-
-        }
-        else if (ghostTurn == 2)
-        {
-            //List<CoordinatePair> movableTiles = 
-        }
-        else if (ghostTurn == 3)
-        {
-
+            currRow += 1;
         }
     }
 
@@ -215,77 +410,8 @@ public class GhostController : MonoBehaviour
                 }
             }
         }
-        ghost0.InitGhost(grid[13, 12], 13, 12);
-        ghost1.InitGhost(grid[13, 13], 13, 13);
-        ghost2.InitGhost(grid[13, 14], 13, 14);
-        ghost3.InitGhost(grid[13, 15], 13, 15);
+        transform.position = grid[resetRow, resetColumn];
+        //targetPosition = transform.position;
+        //startPosition = transform.position;
     }
-}
-
-
-public class CoordinatePair
-{
-    public int row { get; private set; }
-    public int column { get; private set; }
-
-    public CoordinatePair(int row, int column)
-    {
-        this.row = row;
-        this.column = column;
-    }
-}
-
-
-public class GhostMovement
-{
-    public GameObject ghostObj;
-    public Vector3 startPosition;
-    public Vector3 targetPosition;
-    public int currRow, currCol;
-    float elapsedTime = 0f;
-    private const float duration = 0.05f;
-    public bool isLerping = false;
-    public int exitSeq = 13;
-
-    public GhostMovement(int ghostID)
-    {
-        ghostObj = GameObject.FindGameObjectWithTag("Ghost" + ghostID);
-    }
-
-
-    public void InitGhost(Vector3 initialPosition, int row, int col)
-    {
-        ghostObj.transform.position = initialPosition;
-        startPosition = initialPosition;
-        targetPosition = initialPosition;
-        currRow = row;
-        currCol = col;
-    }
-
-    public void SetStartPosition()
-    {
-        startPosition = ghostObj.transform.position;
-    }
-
-    private void LerpGhost()
-    {
-        elapsedTime += Time.deltaTime;
-        float ratio = elapsedTime / duration;
-        ghostObj.transform.position = Vector3.Lerp(startPosition, targetPosition, ratio);
-    }
-
-    public void MoveGhost()
-    {
-        if (Vector3.Distance(ghostObj.transform.position, targetPosition) > 0.1f)
-        {
-            LerpGhost();
-            isLerping = true;
-        }
-        else
-        {
-            isLerping = false;
-            elapsedTime = 0f;
-        }
-    }
-
 }

@@ -4417,7 +4417,6 @@ GameObject:
   m_Component:
   - component: {fileID: 197187831}
   - component: {fileID: 197187832}
-  - component: {fileID: 197187833}
   m_Layer: 0
   m_Name: GhostManager
   m_TagString: GhostManager
@@ -4455,18 +4454,6 @@ MonoBehaviour:
   scareSeqPlaying: 0
   ghostsScaredMusic: {fileID: 8300000, guid: 22d51da8f8e1d924ebb47adf59953878, type: 3}
   ghostDeadMusic: {fileID: 8300000, guid: 896a90e1fdc19c14e96011159f21b6cc, type: 3}
---- !u!114 &197187833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 197187830}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ded9d6b767e96f488c2f550f08288a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &198606780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19664,6 +19651,7 @@ GameObject:
   - component: {fileID: 641191482}
   - component: {fileID: 641191484}
   - component: {fileID: 641191485}
+  - component: {fileID: 641191486}
   m_Layer: 0
   m_Name: Ghost1
   m_TagString: Ghost1
@@ -19772,6 +19760,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8758024, y: 0.87230825, z: 0.2}
   m_Center: {x: -0.14434761, y: -0.000016501363, z: 0}
+--- !u!114 &641191486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641191481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e83b514e2b51743b0a6cf415295953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetRow: 13
+  resetColumn: 15
 --- !u!1001 &641730451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20108,6 +20110,7 @@ GameObject:
   - component: {fileID: 651228115}
   - component: {fileID: 651228114}
   - component: {fileID: 651228117}
+  - component: {fileID: 651228118}
   m_Layer: 0
   m_Name: Ghost3
   m_TagString: Ghost3
@@ -20216,6 +20219,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8789582, y: 0.87257886, z: 0.2}
   m_Center: {x: 0.0030457221, y: 0.008999843, z: 0}
+--- !u!114 &651228118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 651228113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e83b514e2b51743b0a6cf415295953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetRow: 13
+  resetColumn: 13
 --- !u!1001 &652184588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23349,6 +23366,7 @@ GameObject:
   - component: {fileID: 769167139}
   - component: {fileID: 769167141}
   - component: {fileID: 769167142}
+  - component: {fileID: 769167143}
   m_Layer: 0
   m_Name: Ghost2
   m_TagString: Ghost2
@@ -23457,6 +23475,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.86746556, y: 0.9374787, z: 0.2}
   m_Center: {x: 0, y: 0.014272029, z: 0}
+--- !u!114 &769167143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769167138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e83b514e2b51743b0a6cf415295953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetRow: 13
+  resetColumn: 14
 --- !u!1001 &769559354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59567,6 +59599,7 @@ GameObject:
   - component: {fileID: 2048034524}
   - component: {fileID: 2048034526}
   - component: {fileID: 2048034527}
+  - component: {fileID: 2048034528}
   m_Layer: 0
   m_Name: Ghost4
   m_TagString: Ghost4
@@ -59675,6 +59708,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8819078, y: 0.8725755, z: 0.2}
   m_Center: {x: -0.10091854, y: 0.009001493, z: 0}
+--- !u!114 &2048034528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048034523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37e83b514e2b51743b0a6cf415295953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetRow: 13
+  resetColumn: 12
 --- !u!1001 &2054738097
 PrefabInstance:
   m_ObjectHideFlags: 0

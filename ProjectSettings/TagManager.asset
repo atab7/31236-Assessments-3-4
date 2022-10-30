@@ -14,6 +14,22 @@ TagManager:
   - gridAnchor
   - AudioManager
   - PacStuCollider
+  - LifeIndicator
+  - Cherry
+  - GhostManager
+  - Teleporter
+  - Ghost1
+  - Ghost3
+  - ScoreKeeper
+  - Ghost2
+  - GhostTimer
+  - PacStuDustEffect
+  - Counter
+  - GameTimer
+  - HUD
+  - ResetEffect
+  - PacStudent
+  - Ghost4
   layers:
   - Default
   - TransparentFX
